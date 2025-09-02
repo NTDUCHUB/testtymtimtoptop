@@ -29,10 +29,20 @@ def auto_tym(link):
     current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     try:
         response = requests.get(url, timeout=20)
+        data = response.json()
+
         print(f"\n{Fore.GREEN}📌 Thời gian chạy: {current_time}")
         print(f"{Fore.YELLOW}🔗 Link: {link}")
-        print(f"{Fore.BLUE}✅ Phản hồi từ server:")
-        print(Fore.WHITE + f"👉 {response.text}")
+
+        if data.get("status") == "success":
+            print(f"{Fore.BLUE}✅ {data.get('msg')}")
+            print(f"🎬 Tiêu đề: {data.get('title')}")
+            print(f"👤 Tác giả: {data.get('author')}")
+            print(f"❤️ Lượt tim hiện tại: {data.get('likes_now')}")
+            print(f"➕ Số tim đã buff: {data.get('sotim')}")
+        else:
+            print(f"{Fore.RED}❌ Lỗi từ API: {data.get('msg')}")
+
     except Exception as e:
         print(f"\n{Fore.RED}❌ Lỗi khi gửi yêu cầu tại {current_time}")
         print(f"{Fore.YELLOW}🔗 Link: {link}")
